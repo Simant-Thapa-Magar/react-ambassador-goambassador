@@ -1,25 +1,44 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
 import Layout from "../Components/Layout"
+import Products from "../Components/Products"
+import { filters } from "../Models/filters"
+import { Product } from "../Models/product"
 
 const ProductFrontEnd = () => {
-    return <Layout>
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div className="col">
-                <div className="card shadow-sm">
-                    <svg className="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 
-                    <div className="card-body">
-                        <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="btn-group">
-                                <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            <small className="text-muted">9 mins</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    const [allProducts, setAllProducts] = useState([])
+    const [products, setProducts] = useState([])
+    const [filters, setFilters] = useState<filters>({ q: "", sort: "" })
+
+    useEffect(() => {
+        (async () => {
+            const { data } = await axios.get('products/frontend')
+            setAllProducts(data)
+            setProducts(data)
+        })()
+    }, [])
+
+    useEffect(() => {
+        let products = allProducts.filter((product: any) => product.title.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0 || product.description.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0)
+        if (filters.sort === "asc") {
+            products.sort((p1: Product, p2: Product) => {
+                if (p1.price > p2.price) return 1
+                if (p1.price < p2.price) return -1
+                return 0
+            })
+        } else if (filters.sort === "desc") {
+            products.sort((p1: Product, p2: Product) => {
+                if (p1.price < p2.price) return 1
+                if (p1.price > p2.price) return -1
+                return 0
+            })
+        }
+        setProducts(products)
+    }, [filters, allProducts])
+
+    return <Layout>
+        <Products products={products} filters={filters} setFilters={setFilters} />
     </Layout>
 }
 

@@ -6,6 +6,7 @@ import Register from './Pages/Register';
 import Profile from './Pages/Profile';
 import Stats from './Pages/Stats';
 import Rankings from './Pages/Rankings';
+import ProductBackEnd from './Pages/ProductBackEnd';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={'/'} element={<ProductFrontEnd />} />
+          <Route path={'/backend'} element={<ProductBackEnd />} />
           <Route path={'/login'} element={<Login />} />
           <Route path={'/register'} element={<Register />} />
           <Route path={'/profile'} element={<Profile />} />
