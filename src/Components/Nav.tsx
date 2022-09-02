@@ -25,8 +25,8 @@ const Nav = (props: any) => {
 
 
                 <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" className="nav-link px-2 text-secondary">Frontend</a></li>
-                    <li><a href="#" className="nav-link px-2 text-white">Backend</a></li>
+                    <li><a href="/" className="nav-link px-2 text-secondary">Frontend</a></li>
+                    <li><a href="/backend" className="nav-link px-2 text-white">Backend</a></li>
                 </ul>
 
                 {menu}

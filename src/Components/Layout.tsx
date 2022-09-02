@@ -1,14 +1,14 @@
 import axios from "axios"
-import { Dispatch, useEffect, useState } from "react"
+import { Dispatch, useEffect } from "react"
 import { connect } from "react-redux"
-import { Navigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { User } from "../Models/user"
 import { SET_USER } from "../Redux/Actions/UserActions"
 import Header from "./Header"
 import Nav from "./Nav"
 
 const Layout = (props: any) => {
-
+    const location = useLocation()
     useEffect(() => {
         (async () => {
             try {
@@ -20,12 +20,17 @@ const Layout = (props: any) => {
         })()
     }, [])
 
+    let header
+
+    if (location.pathname === "/" || location.pathname === "/backend") {
+        header = <Header />
+    }
 
     return <>
         <Nav />
 
         <main>
-            <Header />
+            {header}
             <div className="album py-5 bg-light">
                 <div className="container">
                     {props.children}
