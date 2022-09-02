@@ -9,7 +9,8 @@ const ProductFrontEnd = () => {
 
     const [allProducts, setAllProducts] = useState([])
     const [products, setProducts] = useState([])
-    const [filters, setFilters] = useState<filters>({ q: "", sort: "" })
+    const [filters, setFilters] = useState<filters>({ q: "", sort: "", page: 1 })
+    const [lastPage, setLastPage] = useState<number | null>(null)
 
     useEffect(() => {
         (async () => {
@@ -20,25 +21,29 @@ const ProductFrontEnd = () => {
     }, [])
 
     useEffect(() => {
-        let products = allProducts.filter((product: any) => product.title.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0 || product.description.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0)
+        const perPage: number = 9
+        let filteredProducts = allProducts.filter((product: any) => product.title.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0 || product.description.toLowerCase().indexOf(filters.q.toLowerCase()) >= 0)
         if (filters.sort === "asc") {
-            products.sort((p1: Product, p2: Product) => {
+            filteredProducts.sort((p1: Product, p2: Product) => {
                 if (p1.price > p2.price) return 1
                 if (p1.price < p2.price) return -1
                 return 0
             })
         } else if (filters.sort === "desc") {
-            products.sort((p1: Product, p2: Product) => {
+            filteredProducts.sort((p1: Product, p2: Product) => {
                 if (p1.price < p2.price) return 1
                 if (p1.price > p2.price) return -1
                 return 0
             })
         }
-        setProducts(products)
+
+        setLastPage(Math.ceil(filteredProducts.length / perPage))
+        setProducts(filteredProducts.slice(0, filters.page * perPage))
+
     }, [filters, allProducts])
 
     return <Layout>
-        <Products products={products} filters={filters} setFilters={setFilters} />
+        <Products products={products} filters={filters} setFilters={setFilters} lastPage={lastPage} />
     </Layout>
 }
 

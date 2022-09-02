@@ -1,12 +1,12 @@
 import { filters } from "../Models/filters";
 import { Product } from "../Models/product";
 
-const Products = (props: { products: Product[], filters: filters, setFilters: (filters: filters) => void }) => {
+const Products = (props: { products: Product[], filters: filters, setFilters: (filters: filters) => void, lastPage: number | null }) => {
     return <>
         <div className="col-md-12 mb-4 input-group">
-            <input type="search" className="form-control" placeholder="Search..." aria-label="Search" onKeyUp={(e: any) => props.setFilters({ ...props.filters, q: e.target.value })}></input>
+            <input type="search" className="form-control" placeholder="Search..." aria-label="Search" onKeyUp={(e: any) => props.setFilters({ ...props.filters, q: e.target.value, page: 1 })}></input>
             <div className="input-group-append">
-                <select className="form-select" onChange={(e: any) => { props.setFilters({ ...props.filters, "sort": e.target.value }) }}>
+                <select className="form-select" onChange={(e: any) => { props.setFilters({ ...props.filters, sort: e.target.value, page: 1 }) }}>
                     <option value="">Select</option>
                     <option value="asc">Price Ascending</option>
                     <option value="desc">Price Descending</option>
@@ -28,6 +28,11 @@ const Products = (props: { products: Product[], filters: filters, setFilters: (f
                 </div>
             ))}
         </div>
+        {(!props.lastPage || props.lastPage > props.filters.page) &&
+            <div className="d-flex justify-content-center mt-4">
+                <button className="btn btn-outline-primary" onClick={() => { props.setFilters({ ...props.filters, page: props.filters.page + 1 }) }}>Load More</button>
+            </div>
+        }
     </>
 }
 

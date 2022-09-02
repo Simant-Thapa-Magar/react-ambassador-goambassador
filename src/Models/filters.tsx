@@ -1,4 +1,5 @@
 export interface filters {
     q: string,
-    sort: string
+    sort: string,
+    page: number,
 }
