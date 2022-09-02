@@ -1,35 +1,40 @@
-const Nav = () => {
-    return <header>
-        <div className="collapse bg-dark" id="navbarHeader">
-            <div className="container">
-                <div className="row">
-                    <div className="col-sm-8 col-md-7 py-4">
-                        <h4 className="text-white">About</h4>
-                        <p className="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
-                    </div>
-                    <div className="col-sm-4 offset-md-1 py-4">
-                        <h4 className="text-white">Contact</h4>
-                        <ul className="list-unstyled">
-                            <li><a href="#" className="text-white">Follow on Twitter</a></li>
-                            <li><a href="#" className="text-white">Like on Facebook</a></li>
-                            <li><a href="#" className="text-white">Email me</a></li>
-                        </ul>
-                    </div>
-                </div>
+import axios from "axios"
+import { connect } from "react-redux"
+
+const Nav = (props: any) => {
+    let menu
+
+    if (props.user?.id) {
+        menu = (
+            <div className="text-end">
+                <a type="button" className="btn btn-outline-light me-2" href="/profile">{props.user.first_name} {props.user.last_name}</a>
+                <a type="button" className="btn btn-warning" href="/login" onClick={async () => { await axios.post('logout') }}>Sign Out</a>
             </div>
-        </div>
-        <div className="navbar navbar-dark bg-dark shadow-sm">
-            <div className="container">
-                <a href="#" className="navbar-brand d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" className="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
-                    <strong>Album</strong>
-                </a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+        )
+    } else {
+        menu = (
+            <div className="text-end">
+                <a type="button" className="btn btn-outline-light me-2" href="/login">Login</a>
+                <a type="button" className="btn btn-warning" href="/register">Sign-up</a>
+            </div>
+        )
+    }
+    return <header className="p-3 text-bg-dark">
+        <div className="container">
+            <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+
+                <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" className="nav-link px-2 text-secondary">Frontend</a></li>
+                    <li><a href="#" className="nav-link px-2 text-white">Backend</a></li>
+                </ul>
+
+                {menu}
             </div>
         </div>
     </header>
 }
 
-export default Nav
+const mapStateToProps = (state: any) => ({ user: state.user })
+
+export default connect(mapStateToProps)(Nav)

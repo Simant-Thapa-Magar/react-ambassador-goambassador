@@ -8,7 +8,6 @@ import Header from "./Header"
 import Nav from "./Nav"
 
 const Layout = (props: any) => {
-    let [redirect, setRedirect] = useState(false)
 
     useEffect(() => {
         (async () => {
@@ -16,14 +15,10 @@ const Layout = (props: any) => {
                 let { data } = await axios.get("users")
                 props.setUser(data)
             } catch (e) {
-                setRedirect(true)
+                console.log("Error ", e)
             }
         })()
     }, [])
-
-    if (redirect) {
-        return <Navigate to={'/login'} />
-    }
 
 
     return <>
